@@ -2,12 +2,15 @@ import { useState } from 'react'
 import './App.css'
 import PokemonsList from './components/PokemonsList'
 import Pokedex from './components/Pokedex'
+import PokemonProvider from './components/PokemonProvider'
 
 function App() {
-  <div className="App">
-    <PokemonsList/>
-    <Pokedex />
-  </div>
+  <PokemonProvider>
+    <div className="App">
+      <PokemonsList/>
+      <Pokedex />
+    </div>
+  </PokemonProvider>
 }
 
 export default App
