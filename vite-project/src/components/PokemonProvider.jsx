@@ -5,14 +5,15 @@ import {
 
 const PokemonContext = createContext()
 
-function PokemonProvider(props) {
+function PokemonProvider({ children }) {
   const [state, dispatch] = usePokemonReducer()
   const { pokemons, capturedPokemons } = state
 
   const capture = (pokemon) => () => dispatch({ type: CAPTURE, pokemon })
   const release = (pokemon) => () => dispatch({ type: RELEASE, pokemon })
   const addPokemon = (pokemon) => dispatch({ type: ADD_POKEMON, pokemon })
-  const addPokemons = (pokemon) => dispatch({ type: ADD_POKEMONS, pokemons })
+  const addPokemons = (pokemons) => dispatch({ type: ADD_POKEMONS, pokemons })
+  //! pokemons being already declared in upper scope
 
   const providerValue = {
     pokemons,
@@ -24,7 +25,7 @@ function PokemonProvider(props) {
   }
   return (
     <PokemonContext.Provider value={providerValue}>
-      {props.children}
+      {children}
     </PokemonContext.Provider>
   )
 }

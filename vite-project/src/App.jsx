@@ -8,11 +8,13 @@ import PokemonForm from './components/PokemonForm'
 function App() {
   return (
     <PokemonProvider>
-      <div className="App">
+      <div className="main">
         <PokemonsList/>
         <Pokedex />
       </div>
-      <PokemonForm />
+      <div className="form-wrapper">
+        <PokemonForm />
+      </div>
     </PokemonProvider>
   )
 }
