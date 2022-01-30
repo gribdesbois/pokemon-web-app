@@ -1,32 +1,39 @@
-import React, { useState, useContext } from 'react'
+import React, { useState, useContext, useEffect } from 'react'
 import { PokemonContext } from './PokemonProvider'
+import listPokemons from './listPokemons'
+
+const url = 'https://pokeapi.co/api/v2/pokemon'
 
 function PokemonsList() {
   const {
     pokemons,
-    setPokemons,
-    capturedPokemons,
-    setCapturedPokemons,
+    capture,
+    addPokemons,
   } = useContext(PokemonContext)
 
-  const removePokemonFromList = (removedPokemon) => pokemons
-    .filter((pokemon) => pokemon !== removedPokemon)
-
-  const capture = (pokemon) => () => {
-    setCapturedPokemons([...capturedPokemons, pokemon])
-    setPokemons(removePokemonFromList(pokemon))
-  }
+  useEffect(() => {
+    const fetchPokemons = async () => {
+      const response = await fetch(url)
+      const data = await response.json()
+      addPokemons(data.results)
+    }
+    fetchPokemons()
+  }, [])
 
   return (
     <div className="pokemons-list">
       <h2>Pokemons List</h2>
-
-      {pokemons.map((pokemon) => <div key={`${pokemon.id} - ${pokemon.name}`}>
-        <div>
-          <span>{pokemon.name}</span>
-          <button onClick={capture(pokemon)}>+</button>
-        </div>
-      </div>)}
+      <table>
+        <tr>
+          <th>Pokemon</th>
+          <th>Capture</th>
+        </tr>
+        {listPokemons({
+          pokemons,
+          onClick: capture,
+          buttonLabel: '+',
+        })}
+      </table>
     </div>
   )
 }

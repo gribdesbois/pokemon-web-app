@@ -1,21 +1,26 @@
-import React, { createContext, useState } from 'react'
+import React, { createContext, useState, useReducer } from 'react'
+import {
+  CAPTURE, RELEASE, ADD_POKEMON, ADD_POKEMONS, usePokemonReducer,
+} from './usePokemonReducer'
 
-export const PokemonContext = createContext()
+const PokemonContext = createContext()
 
 function PokemonProvider(props) {
-  const [pokemons, setPokemons] = useState([
-    { id: 1, name: 'Bulbasaur' },
-    { id: 2, name: 'Charmander' },
-    { id: 3, name: 'Squirtle' },
-  ])
+  const [state, dispatch] = usePokemonReducer()
+  const { pokemons, capturedPokemons } = state
 
-  const [capturedPokemons, setCapturedPokemons] = useState([])
+  const capture = (pokemon) => () => dispatch({ type: CAPTURE, pokemon })
+  const release = (pokemon) => () => dispatch({ type: RELEASE, pokemon })
+  const addPokemon = (pokemon) => dispatch({ type: ADD_POKEMON, pokemon })
+  const addPokemons = (pokemon) => dispatch({ type: ADD_POKEMONS, pokemons })
 
   const providerValue = {
     pokemons,
-    setPokemons,
     capturedPokemons,
-    setCapturedPokemons,
+    release,
+    capture,
+    addPokemon,
+    addPokemons,
   }
   return (
     <PokemonContext.Provider value={providerValue}>
@@ -24,4 +29,4 @@ function PokemonProvider(props) {
   )
 }
 
-export default PokemonProvider
+export { PokemonContext, PokemonProvider }
